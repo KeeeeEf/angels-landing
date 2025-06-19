@@ -3,7 +3,8 @@ import React, { ReactNode } from "react";
 import TokenSale from "../../images/icons/token_sale.svg";
 import WhitePaper from "../../images/icons/white_paper.svg";
 import AngelCoin from "../../images/section1/angel.svg";
-import background from "../../images/section1/background.webp";
+import Shine from "../../images/section1/shine.webp";
+import Background from "../../images/section1/background.webp";
 
 export default function Section1() {
     const theme = useTheme();
@@ -12,7 +13,7 @@ export default function Section1() {
         <section
             style={{
                 backgroundColor: theme.palette.background.default,
-                backgroundImage: `url(${background})`,
+                backgroundImage: `url(${Background})`,
             }}
             className="pt-45"
         >
@@ -48,7 +49,7 @@ export default function Section1() {
                             variant="contained" startIcon={<img src={TokenSale} alt="Token Sale Icon"/>}
                             sx={{ 
                                 backgroundColor: theme.palette.primary.light, 
-                                color: theme.palette.text.secondary, 
+                                color: theme.palette.text.disabled, 
                                 borderRadius: '12px' 
                             }}
                             >
@@ -65,11 +66,16 @@ export default function Section1() {
                             White Paper
                         </Button>
                     </div>
-                    <div className="relative !mx-auto">
+                    <div className="relative !mx-auto flex justify-center mt-34">
                         <img
                             src={AngelCoin}
                             alt="Angels Coin">
-                        </img >
+                        </img>
+                        <img
+                            className="absolute -top-[192px] w-[909px] h-[417px]"
+                            src={Shine}
+                            alt="Shine Effect">
+                        </img>
                     </div>
 
                 </div>
