@@ -26,8 +26,9 @@ export default function Section1() {
                                 color: theme.palette.primary.main,
                                 textAlign: 'center',
                                 fontFamily: "Cinzel",
+                                fontWeight: 700
                             }}
-                            className="!text-[112px] font-bold !leading-26 !mb-6"
+                            className="!text-[112px] !leading-26 !mb-6"
                         >
                             The Angels <br />Have Arrived
                         </Typography>
