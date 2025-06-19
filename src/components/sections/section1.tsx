@@ -15,7 +15,7 @@ export default function Section1() {
                 backgroundColor: theme.palette.background.default,
                 backgroundImage: `url(${Background})`,
             }}
-            className="pt-45"
+            className="w-full pt-45"
         >
             <div className="container mx-auto">
                 <div>
