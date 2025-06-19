@@ -15,7 +15,7 @@ export default function Section1() {
                 backgroundColor: theme.palette.background.default,
                 backgroundImage: `url(${Background})`,
             }}
-            className="w-full pt-45"
+            className="relative pt-45"
         >
             <div className="container mx-auto">
                 <div>
@@ -80,6 +80,7 @@ export default function Section1() {
 
                 </div>
             </div>
+            <div className="absolute !-bottom-1 w-full h-[700px] bg-gradient-to-t from-[#12100F] to-[#12100F]/0"></div>
         </section>
     );
 } 
