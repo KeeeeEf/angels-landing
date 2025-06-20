@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, Link, Modal, Paper, Typography, useTheme } from "@mui/material";
+import { Box, Button, IconButton, keyframes, Link, Modal, Paper, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AngelsLogo from "../../images/angels_logo.webp";
 import WalletIcon from "../../images/icons/wallet"
@@ -11,47 +11,99 @@ const Header: React.FC = () => {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedWallet, setSelectedWallet] = useState<CardanoWallet | undefined>();
+    const [scrolled, setScrolled] = useState(false);
     
+    const gradientShift = keyframes`
+        0%   { background-position:   0% 50%; }
+        50%  { background-position: 100% 50%; }
+        100% { background-position:   0% 50%; }
+    `;
+
     let WalletList = getWallets();
 
+    async function connectWallet(wallet: CardanoWallet)
+    {
+        setSelectedWallet(wallet);
+        setIsModalOpen(false);
+        const api = await wallet.enable();
+        const changeAddress = await api.getChangeAddress();
+        
+    }
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 10);
+        };
+    
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
     return (
-        <header className="fixed z-100 w-full !p-4">
+        <header 
+            style={{
+            }}
+            className={`fixed z-100 transition-all duration-150 ease-in-out w-full ${scrolled ? '!py-2 backdrop-blur-md!' : '!py-4'}`}
+        >
             <div className="container mx-auto flex items-center justify-between">
-                <div className="!h-20 !w-144">
+                <div className={`${scrolled ? '!w-100' : '!h-20 !w-144'}`}>
                     <img
                         src={AngelsLogo}
                         alt="angels logo"
-                        className="h-20"
+                        className={`transition-all duration-150 ${scrolled ? 'h-16' : 'h-20'}`}
                     />
                 </div>
                 <div>
+                {selectedWallet ? (
+                    <Typography
+                        sx={{
+                        color: theme.palette.text.primary,
+                        fontWeight: 500
+                        }}
+                        className="!text-sm capitalize"
+                    >
+                        Hello World
+                    </Typography>
+                    ) : (
                     <Button 
-                        onClick={()=>setIsModalOpen(true)}
+                        onClick={() => setIsModalOpen(true)}
                         disableRipple
                         sx={{
-                            backgroundImage: `linear-gradient(to right, ${theme.palette.gradient.button[30]}, ${theme.palette.gradient.button[20]} 41%, ${theme.palette.gradient.button[10]}, ${theme.palette.gradient.button[30]})`,
-                            borderRadius: "12px",
-                            gap: "10px",
-                            "&:hover": {
-                                backgroundImage: `linear-gradient(to right, ${theme.palette.gradient.button[30]}, ${theme.palette.primary.main} 100%, ${theme.palette.gradient.button[40]}, ${theme.palette.gradient.button[50]})`,
-                            },
-                            "&:active": {
-                                backgroundImage: `linear-gradient(to right, ${theme.palette.gradient.button[60]})`
-                            }
+                        backgroundImage: `linear-gradient(to right, 
+                            ${theme.palette.gradient.button[30]}, 
+                            ${theme.palette.gradient.button[20]} 41%, 
+                            ${theme.palette.gradient.button[10]}, 
+                            ${theme.palette.gradient.button[30]})`,
+                        borderRadius: "12px",
+                        gap: "10px",
+                        backgroundSize: "200% 100%", 
+                        animation: `${gradientShift} 6s ease-in-out infinite`,
+                        transition: "all 0.3s ease-in-out",
+                        "&:hover": {
+                            backgroundImage: `linear-gradient(to right, 
+                            ${theme.palette.gradient.button[30]}, 
+                            ${theme.palette.primary.main} 100%, 
+                            ${theme.palette.gradient.button[40]}, 
+                            ${theme.palette.gradient.button[50]})`,
+                        },
+                        "&:active": {
+                            backgroundImage: `linear-gradient(to right, ${theme.palette.gradient.button[60]})`
+                        }
                         }}
                         className="!w-39 !h-12"
                     >
-                        <WalletIcon sx={{color: theme.palette.secondary.dark, fontSize: "24px"}}/>
+                        <WalletIcon sx={{ color: theme.palette.secondary.dark, fontSize: "24px" }} />
                         <Typography
-                            sx={{
-                                color: theme.palette.secondary.dark,
-                                fontWeight: 500
-                            }}
-                            className="!text-sm capitalize"
+                        sx={{
+                            color: theme.palette.secondary.dark,
+                            fontWeight: 500
+                        }}
+                        className="!text-sm capitalize"
                         >
-                                Connect Wallet
+                        Connect Wallet
                         </Typography>
                     </Button>
+                    )}
                     <Modal
                         open={isModalOpen}
                         onClose={()=> setIsModalOpen(false)}
@@ -94,7 +146,7 @@ const Header: React.FC = () => {
                                 {WalletList.map((wallet) => {
                                     return(
                                         <Button
-                                            onClick={()=>setSelectedWallet(wallet)}
+                                            onClick={()=>connectWallet(wallet)}
                                             key={wallet.id}
                                             sx={{
                                                 justifyContent: "space-between",
